@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- GoogleFont -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&family=Raleway:wght@400;500;700&display=swap" rel="stylesheet" />
+
+    <!-- icon -->
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+
+    <!-- css -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/langdingpage/css/landingpage.css') }}" />
+
+    <title>{{title}}</title>
+  </head>
+  <body>
+    <header id="home">
+      <div class="navbar">
+        <div class="container nav-wrapper">
+          <a href="" class="logo">KRP-KNN</a>
+          <div class="menu-wrapper">
+            <ul class="menu">
+              <li class="menu-item"><a href="#home" class="menu-link">Home</a></li>
+              <li class="menu-item"><a href="#panduan" class="menu-link">Panduan</a></li>
+              <li class="menu-item"><a href="#klasifikasi" class="menu-link">Klasifikasi</a></li>
+            </ul>
+            {% if is_admin %}
+            <a href="/dashboard" class="btn-login">Dashboard</a>
+            {% else %}
+            <a href="/login" class="btn-login">Login</a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <section class="home">
+        <main class="container main-wrapper">
+          <div class="hero-text">
+            <h1 class="heading-1">KLASIFIKASI WILAYAH RAWAN PANGAN KAB. ACEH UTARA MENGGUNAKAN ALGORITMA KNN</h1>
+            <p class="sub-heading">Sebuah Aplikasi yang di gunakan untuk mengkategorikan data berdasarkan kemiripan dengan tetangga terdekat, yang membantu dalam pengenalan pola dan pengambilan keputusan.</p>
+            <div class="btn-main">
+              <a href="#" class="btn-getStarted">Get Started</a>
+            </div>
+          </div>
+        </main>
+      </section>
+    </header>
+
+    <section id="panduan">
+      <div class="container panduan">
+        <h1>Bagaimana Cara menggunakan aplikasi ini ?</h1>
+        <p>Untuk menggunakan aplikasi ini sangat mudah, berikut caranya :</p>
+        <img src="{{ url_for('static', filename='assets/langdingpage/img/step.png') }}" alt="" />
+      </div>
+    </section>
+    <section id="klasifikasi">
+      <div class="klasifikasi container">
+        <div class="klasifikasi-wrapper">
+          <form action="/api/uji1" method="post">
+            <h1>Welcom to Klasifikasi Wilayah Rawan Pangan</h1>
+            <p>Untuk mengklasifikasikan wilayah rawan pangan anda wajib mengisi data dibawah ini !</p>
+            <div class="input-item">
+              <div>
+                <label for="">Desa</label>
+                <input type="text" placeholder="Desa" name="desa" />
+              </div>
+              <div>
+                <label for="">Luas bahan baku sawah</label>
+                <input type="text" name="luas_lahan_baku_sawah_m2" placeholder="Luas bahan baku sawah" />
+              </div>
+            </div>
+            <div class="input-item">
+              <div>
+                <label for="">Jumlah sarana penyedia pangan</label>
+                <input type="text" name="jumlah_sarana_prasarana_penyedia_pangan" placeholder="Jumlah sarana penyedia pangan" />
+              </div>
+              <div>
+                <label for="">Jmlh pddk kesejateraan rendah</label>
+                <input type="text" name="jumlah_pddk_tingkat_kesejahteraan_rendah" placeholder="Jmlh pddk tingkat kesejateraan rendah" />
+              </div>
+            </div>
+            <div class="input-item">
+              <div>
+                <label for="">Desa yg tdk memiliki akses memadai</label>
+                <input type="text" name="desa_yang_tidak_memiliki_akses_yang_memadai" placeholder="Desa yang tidak memiliki akses memadai" />
+              </div>
+              <div>
+                <label for="">Jmlh RT tanpa akses air bersih</label>
+                <input type="text" name="jumlah_rt_tanpa_akses_air_bersih" placeholder="Jmlh RT tanpa akses air bersih" />
+              </div>
+            </div>
+            <div class="input-item">
+              <div>
+                <label for="">Jumlah Nakes</label>
+                <input type="text" name="jumlah_nakes" placeholder="Jumlah nakes" />
+              </div>
+              <div>
+                <label for="">Jumlah Penduduk</label>
+                <input type="text" name="jumlah_penduduk" placeholder="Jumlah penduduk" />
+              </div>
+            </div>
+            <div class="input-item">
+              <div>
+                <label for="">Jumlah Rumah tangga</label>
+                <input type="text" name="jumlah_rumah_tangga" placeholder="Jumlah Rumah tangga" />
+              </div>
+
+              <div class="button-proses">
+                <input type="submit" class="btn-proses" value="Proses" />
+                <a href="#home" class="btn-back">Back</a>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="right">
+          <img src="{{ url_for('static', filename='assets/langdingpage/img/background.jpg') }}" alt="" />
+          <p style="text-align: center"></p>
+        </div>
+      </div>
+    </section>
+    <script src="{{ url_for('static', filename='assets/vendor/jquery/jquery.min.js') }}"></script>
+    <script>
+      $(document).ready(function () {
+        $(".btn-proses").click(function (e) {
+          e.preventDefault();
+          $.ajax({
+            type: "POST",
+            url: "/api/uji1",
+            data: $("form").serialize(),
+            success: function (data) {
+              var resultMessage = `${data.desa} diklasifikasikan sebagai ${data.priority} Berdasarkan Mayoritas Tetangga Terdekatnya`;
+              $(".right p").text(resultMessage);
+            },
+            error: function (xhr, status, error) {
+              var errorMessage = xhr.status + ": " + xhr.statusText;
+              alert("Error - " + errorMessage);
+              $(".right p").text("Error - " + errorMessage);
+            },
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

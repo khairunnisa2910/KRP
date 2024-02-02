@@ -1,0 +1,71 @@
+{% extends 'navbar.html' %}
+
+{%block content%}
+
+<h1 class="h3 mb-2 text-gray-800">{{title}}</h1>
+<p class="mb-4">Secara istilah rasio merupakan suatu bilangan perbandingan antara dua hal yang saling berhubungan.</p>
+
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <div class="panel" style="display:flex;flex-direction:column">
+            <input type="submit" id="hitungRasio" value="Hitung Rasio" class="btn btn-info mb-3" >
+        </div>
+    </div>
+</div>
+
+
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Data Rasio</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <div class="table-responsive">
+                <table id="rasio" class="table table-striped table-bordered" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Desa</th>
+                            {% for column in col_select %}
+                                <th>{{ column|replace("_", " ")|title }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for x in rasio %}
+                            <tr>
+                                <td>{{loop.index}}</td>
+                                <td>{{ x.desa }}</td>
+                                {% for col in col_select %}
+                                    <td>{{ x[col] }}</td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+    $('#rasio').DataTable();
+});
+
+$(document).on("click", "#hitungRasio", function () {
+    $.ajax({
+        type: "POST",
+        url: "/rasio_data",
+        success: function(response) {
+            window.location.reload();
+        }
+    });
+});
+</script>
+
+{% endblock %}

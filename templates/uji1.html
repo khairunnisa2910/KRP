@@ -1,0 +1,58 @@
+{% extends 'navbar.html' %} {%block content%}
+
+<h1 class="h3 mb-2 text-gray-800">Pengujian Klasifikasi Wilayah Rawan Pangan</h1>
+<p>Pengujian klasifikasi wilayah rawan pangan pada aplikasi ini menggunakan algoritma K-Neareast Neighbors</p>
+
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+  <div class="card-header py-3">
+    <h6 class="m-0 font-weight-bold text-primary">Form</h6>
+    <p></p>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-sm-12">
+        <form method="post" action="{{url_for('api_uji')}}">
+          {% for col, data_type in columns.items() %}
+          <div class="form-group row">
+            <label class="col-sm-4 col-form-label">{{ col|replace("_", " ")|title }}</label>
+            <div class="col-sm-8">
+              {% if data_type == 'INTEGER' %} <input type="number" class="form-control" name="{{ col }}" placeholder="{{ col|replace("_", " ")|title }}"> {% else %} <input type="text" class="form-control" name="{{ col }}" placeholder="{{
+              col|replace("_", " ")|title }}"> {% endif %}
+            </div>
+          </div>
+          {% endfor %}
+          <div class="form-group">
+            <button class="btn btn-primary"><span class="glyphicon glyphicon-save"></span> Proses</button>
+            <a class="btn btn-danger" href="{{url_for('dataset')}}"><span class="glyphicon glyphicon-arrow-left"></span> Kembali</a>
+          </div>
+        </form>
+        <p class="info-api alert alert-info text-center text-bold"></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function () {
+    $(".btn-primary").click(function (e) {
+      e.preventDefault();
+      $.ajax({
+        type: "POST",
+        url: "/api/uji1",
+        data: $("form").serialize(),
+        success: function (data) {
+          var resultMessage = `${data.desa} diklasifikasikan sebagai ${data.priority} Berdasarkan Mayoritas Tetangga Terdekatnya`;
+          $(".info-api").text(resultMessage);
+        },
+        error: function (xhr, status, error) {
+          var errorMessage = xhr.status + ": " + xhr.statusText;
+          alert("Error - " + errorMessage);
+          $(".card-header p").text("Error - " + errorMessage);
+        },
+      });
+    });
+  });
+</script>
+
+{% endblock %}

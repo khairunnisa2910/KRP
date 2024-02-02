@@ -1,0 +1,72 @@
+{% extends 'navbar.html' %} {%block content%}
+
+<h1 class="h3 mb-2 text-gray-800">{{title}}</h1>
+<p class="mb-4">
+  Evaluation Metrics adalah ukuran atau metrik yang digunakan untuk mengevaluasi kinerja suatu sistem atau model. Evaluation Metrics digunakan untuk mengukur seberapa baik suatu sistem atau model dalam memecahkan masalah atau memprediksi
+  hasil yang diinginkan.
+</p>
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+  <div class="card-header py-3">
+    <h6 class="m-0 font-weight-bold text-primary">Confusion Matrix</h6>
+  </div>
+  <div class="card-body">
+    <div class="table-responsive">
+      <table id="example" class="table table-striped table-bordered" style="width: 100%">
+        <thead>
+          <tr>
+            <th></th>
+            {% for x in label%}
+            <th>Prediksi {{x|int}}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in matrix %}
+          <tr>
+            <td>Aktual {{ label[loop.index0]|int }}</td>
+            {% for k in row %}
+            <td>{{ k }}</td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="card shadow mb-4">
+  <div class="card-header py-3">
+    <h6 class="m-0 font-weight-bold text-primary">Evaluasi</h6>
+  </div>
+  <div class="card-body">
+    <div id="chart" class="chart"></div>
+  </div>
+  <div class="card-header py-3">
+    <h6 class="m-0 font-weight-bold text-primary">Keterangan :</h6>
+  </div>
+  <div class="card-body">
+    <ol class="list lead">
+      <li class="list-item one">Akurasi adalah metrik evaluasi yang mengukur seberapa baik model membuat prediksi yang benar dari total prediksi yang dilakukan.</li>
+      <li class="list-item two">
+        Presisi adalah metrik evaluasi yang mengukur seberapa baik model membuat prediksi yang benar untuk kelas positif dari total prediksi positif yang dilakukan. Dalam konteks klasifikasi, presisi memberikan gambaran mengenai seberapa
+        sering model memprediksi kelas positif dengan benar, di antara semua prediksi positif yang dibuat oleh model.
+      </li>
+      <li class="list-item three">Recall adalah metrik evaluasi yang menggambarkan seberapa baik suatu model dalam mengidentifikasi kelas positif dengan benar.</li>
+      <li class="list-item four">
+        F1 Score merupakan metrik evaluasi yang mencerminkan keseimbangan antara Presisi (Precision) dan Sensitivitas (Recall). Nilai F1 Score akan memberikan informasi tentang seberapa baik model kita dalam menggabungkan kemampuan Presisi
+        dan Sensitivitas (Recall), sehingga kita bisa memahami seberapa efektif model kita dalam mengklasifikasikan model secara akurat.
+      </li>
+    </ol>
+  </div>
+</div>
+
+<script src='{{url_for("static", filename="assets/js/plotly-latest.min.js")}}'></script>
+<script type="text/javascript">
+  var graphs = {{image | safe}};
+  Plotly.plot('chart',graphs,{});
+</script>
+
+{% endblock %}

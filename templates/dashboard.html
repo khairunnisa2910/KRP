@@ -1,0 +1,49 @@
+{% extends 'navbar.html' %}
+
+{%block content%}
+
+<h1 class="h3 mb-2 text-gray-800">Klasifikasi K-Nearest Neighbors (KNN)</h1>
+<p class="mb-4">K-Nearest Neighbors (KNN) adalah salah satu algoritma machine learning yang digunakan untuk melakukan klasifikasi atau regresi berdasarkan data yang telah diberikan. Ini seperti metode "teman-teman terdekat" dalam dunia nyata. Jadi, bagaimana KNN bekerja?</p>
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Cara Kerja KNN</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <p>
+                Bayangkan Anda memiliki sekelompok data yang masing-masing memiliki beberapa fitur atau atribut. Misalnya, kita ingin memprediksi apakah suatu buah adalah apel atau jeruk berdasarkan berat dan ukuran. KNN akan mencari "tetangga terdekat" dari buah yang ingin diprediksi.
+                <ol>
+                    <li><strong>Mengukur Jarak:</strong> KNN pertama-tama mengukur jarak antara buah yang ingin diprediksi dengan buah-buah lain dalam data training. Ini dapat menggunakan berbagai metrik jarak, seperti Euclidean, Manhattan, atau lainnya. Jarak ini menggambarkan seberapa mirip atau berbedanya buah yang ingin diprediksi dengan buah-buah lainnya.</li>
+                    <li><strong>Menentukan Nilai K:</strong> Selanjutnya, Anda harus memilih berapa banyak tetangga yang akan dipertimbangkan (nilai K). Misalnya, jika K = 3, maka KNN akan mencari 3 buah terdekat yang memiliki jarak paling dekat dengan buah yang ingin diprediksi.</li>
+                    <li><strong>Voting:</strong> Setelah K tetangga terdekat telah ditemukan, KNN melakukan "voting." Artinya, ia melihat klasifikasi (misalnya, apel atau jeruk) dari K tetangga tersebut dan menentukan mayoritasnya. Misalnya, jika 2 dari 3 tetangga terdekat adalah apel, maka buah yang ingin diprediksi juga akan diklasifikasikan sebagai apel.</li>
+                    <li><strong>Hasil Prediksi:</strong> Akhirnya, KNN memberikan hasil prediksi berdasarkan hasil voting tadi. Jadi, buah yang ingin diprediksi akan diklasifikasikan sebagai apel atau jeruk berdasarkan mayoritas tetangga terdekatnya.</li>
+                </ol>
+            </p>
+            <p>
+                Penting untuk memahami bahwa KNN bekerja dengan asumsi bahwa buah yang serupa dalam fitur-fiturnya akan cenderung memiliki label yang sama. Meskipun sederhana, KNN dapat memberikan hasil yang baik dalam beberapa kasus, terutama jika datanya cukup besar dan beragam. Namun, Anda perlu berhati-hati dalam memilih nilai K yang sesuai, karena hal ini dapat mempengaruhi hasil prediksi.
+            </p>
+        </div>
+    </div>
+</div>
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Petunjuk Penggunaan</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <p>1. Langkah pertama adalah menyiapkan dataset dalam format file Excel dengan contoh data berikut ini: </p>
+            <a href="{{ url_for('static', filename='data_ex.xlsx') }}" class="btn btn-secondary"><i class="glyphicon glyphicon-download-alt"></i> Unduh Contoh Data</a>
+            <br>
+            <p>2. Selanjutnya, navigasikan ke halaman "Dataset" dan pilih file Excel yang berisi dataset untuk melakukan proses impor data. Setelah berhasil mengimpor data, informasi tersebut akan disimpan dalam database.</p>
+            <p>3. Proses berikutnya adalah membagi dataset menjadi data latih (training) dan data uji (testing) secara otomatis dalam rasio 70:30. Anda dapat melakukannya dengan pergi ke halaman "Pembagian Data" dan menekan tombol "Bagi Data".</p>
+            <p>4. Normalisasi data dan masuklah ke halaman "Klasifikasi" untuk menguji metode K-Nearest Neighbors (KNN) dan mengevaluasinya.</p>
+            <p>5. Untuk menguji satu data, navigasikan ke halaman "Pengujian KNN".</p>
+        </div>
+    </div>
+</div>
+
+
+
+{%endblock%}

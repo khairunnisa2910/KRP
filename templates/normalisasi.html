@@ -1,0 +1,101 @@
+{% extends 'navbar.html' %}
+
+{%block content%}
+
+<h1 class="h3 mb-2 text-gray-800">{{title}}</h1>
+<p class="mb-4">Normalisasi adalah teknik yang sering diterapkan sebagai bagian dari penyiapan data untuk pembelajaran mesin. Tujuan normalisasi adalah mengubah nilai kolom numerik dalam himpunan data untuk menggunakan skala umum, tanpa mendistorsi perbedaan dalam rentang nilai atau kehilangan informasi.</p>
+
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <div class="panel" style="display:flex;flex-direction:column">
+            <input type="submit" id="normalisasiData" value="Normalisasi Data" class="btn btn-info mb-3" >
+        </div>
+    </div>
+</div>
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Data Training</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table id="datatrain" class="table table-striped table-bordered" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Desa</th>
+                        {% for column in columns %}
+                            <th>{{ column|replace("_", " ")|title }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for x in data_train %}
+                        <tr>
+                            <td>{{loop.index}}</td>
+                            <td>{{x.desa}}</td>
+                            {% for col in columns %}
+                                <td>{{ x[col] }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Data Testing</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table id="datatest" class="table table-striped table-bordered" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Desa</th>
+                        {% for column in columns %}
+                            <th>{{ column|replace("_", " ")|title }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for x in data_test %}
+                        <tr>
+                            <td>{{loop.index}}</td>
+                            <td>{{x.desa}}</td>
+                            {% for col in columns %}
+                                <td>{{ x[col] }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+$(document).ready(function () {
+    $('#datatrain').DataTable();
+    $('#datatest').DataTable();
+});
+
+$(document).on("click", "#normalisasiData", function () {
+    $.ajax({
+        type: "POST",
+        url: "/normalisasi_data",
+        success: function(response) {
+            window.location.reload();
+        }
+    });
+});
+
+</script>
+
+{% endblock %}

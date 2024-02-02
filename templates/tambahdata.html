@@ -1,0 +1,72 @@
+{% extends 'navbar.html' %}
+
+{%block content%}
+
+<div class="page-header">
+    <h1>{{title}}</h1>
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        <form method="post" action="{{url_for('proses_tambahdata')}}">
+            <div class="form-group">
+                <label>Nama</label>
+                <input class="form-control" type="text" name="nama" required/>
+            </div>
+            <div class="form-group">
+                <label>Alamat</label>
+                <select name="alamat", class="form-control" required>
+                    {% for x in alamat %}
+                    <option value="{{x}}">{{x}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Pekerjaan</label>
+                <select name="pekerjaan", class="form-control" required>
+                    {% for x in pekerjaan %}
+                    <option value="{{x}}">{{x}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Jumlah Tanggungan</label>
+                <input class="form-control" type="number" name="jumlah_tanggungan" required />
+            </div>
+            <div class="form-group">
+                <label>Umur</label>
+                <input class="form-control" type="text" name="umur" required />
+            </div>
+            <div class="form-group">
+                <label>Penghasilan</label>
+                <select name="penghasilan", class="form-control" required>
+                    {% for x in penghasilan %}
+                    <option value="{{x}}">{{x}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Kondisi Rumah</label>
+                <select name="kondisi_rumah", class="form-control" required>
+                    {% for x in kondisi_rumah %}
+                    <option value="{{x}}">{{x}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Label</label>
+                <select name="label", class="form-control" required>
+                    {% for x in label %}
+                    <option value="{{x}}">{{x}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary"><span class="glyphicon glyphicon-save"></span> Simpan</button>
+                <a class="btn btn-danger" href="{{url_for('dataset')}}"><span class="glyphicon glyphicon-arrow-left"></span> Kembali</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,98 @@
+{% extends 'navbar.html' %} {%block content%}
+
+<h1 class="h3 mb-2 text-gray-800">{{title}}</h1>
+<p class="mb-4">
+  Train test split adalah teknik umum yang digunakan dalam pembelajaran mesin untuk membagi data menjadi set pelatihan dan tes. Proses ini penting dalam proses pemodelan data, karena memungkinkan kita untuk menilai kinerja model pada data
+  yang tidak terlihat.
+</p>
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+  <div class="card-header py-3">
+    <form method="POST" style="display: flex; flex-direction: column">
+      <h6 class="m-0 font-weight-bold text-primary">Rasio Data Training : Data Testing (%)</h6>
+      <br />
+      <div class="form-group">
+        <select name="rasio_split" , class="form-control" required>
+          <option disabled selected value="0.3">Silahkan dipilih!</option>
+          <option value="0.3">70 : 30</option>
+          <option value="0.2">80 : 20</option>
+          <option value="0.1">90 : 10</option>
+        </select>
+      </div>
+      <input type="submit" name="submit" id="splitButton" value="Split Data" class="btn btn-info mb-3" id="split" />
+    </form>
+  </div>
+</div>
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+  <div class="card-header py-3">
+    <h6 class="m-0 font-weight-bold text-primary">Data Training</h6>
+  </div>
+  <div class="card-body">
+    <div class="table-responsive">
+      <table id="datatrain" class="table table-striped table-bordered" style="width: 100%">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Desa</th>
+            {% for column in columns %}
+            <th>{{ column|replace("_", " ")|title }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for x in data_train %}
+          <tr>
+            <td>{{loop.index}}</td>
+            <td>{{x.desa}}</td>
+            {% for col in columns %}
+            <td>{{ x[col] }}</td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+  <div class="card-header py-3">
+    <h6 class="m-0 font-weight-bold text-primary">Data Testing</h6>
+  </div>
+  <div class="card-body">
+    <div class="table-responsive">
+      <table id="datatest" class="table table-striped table-bordered" style="width: 100%">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Desa</th>
+            {% for column in columns %}
+            <th>{{ column|replace("_", " ")|title }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for x in data_test %}
+          <tr>
+            <td>{{loop.index}}</td>
+            <td>{{x.desa}}</td>
+            {% for col in columns %}
+            <td>{{ x[col] }}</td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    $("#datatrain").DataTable();
+    $("#datatest").DataTable();
+  });
+</script>
+
+{% endblock %}

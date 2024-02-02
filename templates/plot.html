@@ -1,0 +1,23 @@
+{% extends 'navbar.html' %} {%block content%}
+
+<h1 class="h3 mb-2 text-gray-800">{{title}}</h1>
+<p class="mb-4">
+  Metode Elbow adalah sebuah metode yang digunakan untuk mencari jumlah klasifikasi K terbaik pada algoritma yang membutuhkan nilai tersebut, disini saya menggunakan algoritma K-Nearest Neighbors dengan hasil sebagai berikut di bawah ini :
+</p>
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+  <div class="card-header py-3"></div>
+  <div class="card-body">
+    <div class="table-responsive">
+      <div id="chart" class="chart"></div>
+    </div>
+  </div>
+</div>
+
+<script src='{{url_for("static", filename="assets/js/plotly-latest.min.js")}}'></script>
+<script type="text/javascript">
+  var graphs = {{image | safe}};
+  Plotly.plot('chart',graphs,{});
+</script>
+
+{% endblock %}

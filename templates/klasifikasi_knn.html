@@ -1,0 +1,76 @@
+{% extends 'navbar.html' %} {%block content%}
+
+<h1 class="h3 mb-2 text-gray-800">{{title}}</h1>
+<p class="mb-4">
+  Algoritma dalam data mining (atau machine learning) adalah sekumpulan heuristik dan perhitungan yang dapat membuat model berdasarkan data. Untuk membuat model, algoritme terlebih dahulu menganalisis data yang Anda berikan, mencari jenis
+  pola atau tren tertentu.
+</p>
+
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+  <div class="card-header py-3">
+    <form method="POST" style="display: flex; flex-direction: column">
+      <div class="form-group">
+        <label>Nilai K</label>
+        {% if nilai_k is defined %}
+        <input type="number" name="k_value" class="form-control" placeholder="3 adalah Default Nilai K Default" value="{{ nilai_k }}" required />
+        {% else %}
+        <input type="number" name="k_value" class="form-control" placeholder="3 adalah Default Nilai K Default" required />
+        {% endif %}
+      </div>
+      <input type="submit" id="klasifikasiButton" name="submit" value="Klasifikasi" class="btn btn-info mb-3" id="split" />
+    </form>
+  </div>
+</div>
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+  <div class="card-header py-3">
+    <h6 class="m-0 font-weight-bold text-primary">Data Testing</h6>
+  </div>
+  <div class="card-body">
+    <div class="table-responsive">
+      <table id="example" class="table table-striped table-bordered" style="width: 100%">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Desa</th>
+            {% for column in columns %}
+            <th>{{ column|replace("_", " ")|title }}</th>
+            {% endfor %}
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for x in test %}
+          <tr>
+            <td>{{loop.index}}</td>
+            <td>{{x.desa}}</td>
+            {% for col in columns %}
+            <td>{{ x[col] }}</td>
+            {% endfor %}
+            <td>
+              <a class="btn btn-xs btn-info" href="{{url_for('detail', id=x.id)}}">Detail</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="card-footer">
+    Akurasi :
+    <p class="btn btn-info">{{ akurasi }} %</p>
+    <h5 class="text-danger">
+      *
+      <span class="text-dark">Maka dapat diartikan bahwa kemampuan algoritma K-Nearest Neighbor dalam mengklasifikasi wilayah rawan pangan di Kab. Aceh Utara adalah {{ akurasi }} % . </span>
+    </h5>
+  </div>
+</div>
+
+<script type="text/javascript">
+  
+  $(document).ready(function () {
+    $("#example").DataTable();
+  });
+</script>
+{% endblock %}

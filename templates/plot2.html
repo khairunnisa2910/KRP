@@ -1,0 +1,39 @@
+{% extends 'navbar.html' %}
+{%block content%}
+
+<h1 class="h3 mb-2 text-gray-800">{{title}}</h1>
+<p class="mb-4">Visualisasi data adalah proses menggunakan elemen visual seperti diagram, grafik, atau peta untuk merepresentasikan data</p>
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+  <div class="card-header py-3">
+    <h6 class="m-0 font-weight-bold text-primary">{{title}}</h6>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      {% for img in image %}
+        <div class="col-md-6">
+          <div id='chart{{ loop.index }}' class='chart'></div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+  <script src='{{url_for("static", filename="assets/js/plotly-latest.min.js")}}'></script>
+  <script type='text/javascript'>
+    let graphs = [];
+
+    {% for img in image %}
+      graphs.push({{ img | safe }});
+    {% endfor %}
+    
+    for (let i = 0; i < graphs.length; i++) {
+      let chartId = `chart${i + 1}`;
+      
+      if (graphs[i]) {
+        Plotly.plot(chartId, graphs[i], {});
+      }
+    }
+  </script>
+  
+{% endblock %}

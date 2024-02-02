@@ -1,0 +1,210 @@
+{% extends 'navbar.html' %}
+
+{%block content%}
+
+<!-- Page Heading -->
+<h1 class="h3 mb-2 text-gray-800">{{title}}</h1>
+<p class="mb-4">Dataset pada dasarnya adalah kumpulan data. Berdasarkan definisi dari IBM, dataset mengacu pada file yang berisi satu atau lebih catatan/data.</p>
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">{{title}}</h6>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-9 ">
+                <form method="POST" action="/importdataset" enctype="multipart/form-data" style="display:flex;flex-direction:column">
+                    <input id="fileimport" name="file" class="form-control" required type="file">
+                    <input type="submit" name="Import" value="Import" class="btn btn-info mb-3" id="klikimport">
+                </form>
+            </div>
+            <div class="col-md-3">
+                <br>
+                <a data-toggle="modal" data-target="#tambahModal" class="btn btn-primary" style="display:flex;flex-direction:column">Tambah Data</a>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        {% for column in columns %}
+                            <th>{{ column|replace("_", " ")|title }}</th>
+                        {% endfor %}
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for x in data %}
+                        <tr>
+                            <td>{{loop.index}}</td>
+                            {% for col in columns %}
+                                <td>{{ x[col] }}</td>
+                            {% endfor %}
+                            <td>
+                                <a class="btn btn-xs btn-warning edit-button" data-toggle="modal" data-target="#editModal" data-row="{{ x }}" data-id="{{ x.id }}"><i class="fas fa-edit"></i></a>
+                                <a class="btn btn-xs btn-danger delete-button" data-id="{{ x.id }}"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal" tabindex="-1" role="dialog" id="tambahModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- header-->
+            <div class="modal-header">
+            <h5 class="modal-title">Tambah Data</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+            <!--body-->
+            <div class="modal-body">
+                <form id="tambahForm" method="POST">
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label">Kode Desa</label>
+                        <div class="col-sm-8">
+                            <input type="number" class="form-control" name="id" placeholder="Kode Desa">
+                        </div>
+                    </div>
+                    {% for col, data_type in columns.items() %}
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">{{ col|replace("_", " ")|title }}</label>
+                            <div class="col-sm-8">
+                                {% if data_type == 'INTEGER' %}
+                                    <input type="number" class="form-control" name="{{ col }}" placeholder="{{ col|replace("_", " ")|title }}">
+                                {% else %}
+                                    <input type="text" class="form-control" name="{{ col }}" placeholder="{{ col|replace("_", " ")|title }}">
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </form>
+            </div>
+            <!--footer-->
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary" id="tambahButton">Submit</button>
+                <button class="btn btn-danger" data-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal" tabindex="-1" role="dialog" id="editModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- header-->
+            <div class="modal-header">
+            <h5 class="modal-title">Edit Data</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+            <!--body-->
+            <div class="modal-body">
+                <form id="editForm" method="POST">
+                    <input type="hidden" name="id" value="">
+                    {% for col, data_type in columns.items() %}
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">{{ col|replace("_", " ")|title }}</label>
+                            <div class="col-sm-8">
+                                {% if data_type == 'INTEGER' %}
+                                    <input type="number" class="form-control" name="{{ col }}" placeholder="{{ col|replace("_", " ")|title }}">
+                                {% else %}
+                                    <input type="text" class="form-control" name="{{ col }}" placeholder="{{ col|replace("_", " ")|title }}">
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </form>
+            </div>
+            <!--footer-->
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary" id="editButton">Submit</button>
+                <button class="btn btn-danger" data-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+    $('#dataTable').DataTable();
+});
+
+$(document).on("click", ".edit-button", function () {
+    var row = JSON.parse($(this).data('row').replace(/'/g, '"'));
+    var modal = $('#editModal');
+    var id = $(this).data('id');
+
+    for (const [key, value] of Object.entries(row)) {
+        modal.find('input[name="' + key + '"]').val(value);
+    }
+
+    modal.find('input[name="id"]').val(id);
+
+});
+
+$(document).ready(function() {
+    $("#editButton").click(function() {
+
+        var data = $("#editForm").serialize();
+
+        $.ajax({
+            type: "POST",
+            url: "/update_data",
+            data: data,
+            success: function(response) {
+                window.location.reload();
+                alert('Data berhasil di perbaharui');
+            }
+        });
+
+    });
+});
+
+
+$(document).on("click", ".delete-button", function () {
+    var id = $(this).data('id');
+
+    if (confirm("Hapus data " + id + "?")) {
+        $.ajax({
+            type: "POST",
+            url: "/delete_data",
+            data: { id: id },
+            success: function(response) {
+                window.location.reload();
+            }
+        });
+    }
+});
+
+
+
+$(document).ready(function() {
+    $("#tambahButton").click(function() {
+
+        var data = $("#tambahForm").serialize();
+
+        $.ajax({
+            type: "POST",
+            url: "/tambah_data",
+            data: data,
+            success: function(response) {
+                window.location.reload();
+                alert('Data berhasil di tambah!');
+            }
+        });
+
+    });
+});
+
+</script>
+
+{% endblock %}
